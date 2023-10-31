@@ -1,5 +1,7 @@
 # Kittygram - Учебный проект Яндекс.Практикум
 
+![Github Actions main workflow](https://github.com/apicqq/kittygram_final/actions/workflows/main.yml/badge.svg)
+
 ## Использованные при реализации проекта технологии
  - Python
  - Django

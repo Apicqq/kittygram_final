@@ -12,6 +12,8 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
   backend:
+    depends_on:
+      - db
     image: apicqq/kittygram_backend
     env_file: .env
     volumes:
@@ -24,6 +26,9 @@ services:
     volumes:
       - static:/static
   gateway:
+    depends_on:
+      - frontend
+      - backend
     image: apicqq/kittygram_gateway
     env_file: .env
     ports:
