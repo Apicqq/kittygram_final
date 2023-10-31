@@ -1,33 +1,33 @@
 version: '3'
 
 volumes:
-  pg_data_produtction:
-  static_production:
-  media_production:
+  pg_data:
+  static:
+  media:
 
 services:
   db:
-    image: postgres:13
+    image: postgres:13.10
     env_file: .env
     volumes:
-      - pg_data_produtction:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql/data
   backend:
     image: apicqq/kittygram_backend
     env_file: .env
     volumes:
-      - static_production:/backend_static
-      - media_production:/app/media
+      - static:/backend_static
+      - media:/app/media
   frontend:
     env_file: .env
     image: apicqq/kittygram_frontend
     command: cp -r /app/build/. /static/
     volumes:
-      - static_production:/static
+      - static:/static
   gateway:
     image: apicqq/kittygram_gateway
     env_file: .env
     ports:
       - "9000:80"
     volumes:
-      - static_production:/static
-      - media_production:/media
+      - static:/static
+      - media:/media
