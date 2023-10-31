@@ -118,4 +118,4 @@ jobs:
         with:
           context: ./nginx/
           push: true
-          tags: apicqq/taski_gateway:latest
+          tags: apicqq/kittygram_gateway:latest
