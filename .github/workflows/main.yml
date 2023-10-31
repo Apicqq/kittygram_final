@@ -12,9 +12,9 @@ jobs:
       postgres:
         image: postgres:13.10
         env:
-          POSTGRES_DB: kittygram_db
-          POSTGRES_USER: kittygram_password
-          POSTGRES_PASSWORD: kittygram_password
+          POSTGRES_DB: django_db
+          POSTGRES_USER: django_password
+          POSTGRES_PASSWORD: django_password
         ports:
           - 5432:5432
         options: >-
@@ -36,9 +36,9 @@ jobs:
           pip install -r ./backend/requirements.txt
       - name: Test with flake8 and django tests
         env:
-          POSTGRES_USER: kittygram_user
-          POSTGRES_PASSWORD: kittygram_password
-          POSTGRES_DB: kittygram_db
+          POSTGRES_USER: django_user
+          POSTGRES_PASSWORD: django_password
+          POSTGRES_DB: django_db
           DB_HOST: 127.0.0.1
           DB_PORT: 5432
         run: |
