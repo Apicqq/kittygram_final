@@ -80,7 +80,7 @@ jobs:
         run: |
           cd frontend/
           npm run test
-  build_frontend_tests_and_push_to_docker_hub:
+  build_frontend_and_push_to_docker_hub:
     name: Push frontend to Docker Hub
     runs-on: ubuntu-latest
     needs: frontend_tests
