@@ -1,26 +1,92 @@
-#  Как работать с репозиторием финального задания
+# Kittygram - Учебный проект Яндекс.Практикум
 
-## Что нужно сделать
+## Использованные при реализации проекта технологии
+ - Python
+ - Django
+ - djangorestframework
+ - Nginx
+ - gunicorn
+ - PostgreSQL
+ - Docker
 
-Настроить запуск проекта Kittygram в контейнерах и CI/CD с помощью GitHub Actions
+## Установка проекта на локальный компьютер из репозитория 
 
-## Как проверить работу с помощью автотестов
+### Для установки проекта необходимо выполнить следующие шаги:
 
-В корне репозитория создайте файл tests.yml со следующим содержимым:
-```yaml
-repo_owner: ваш_логин_на_гитхабе
-kittygram_domain: полная ссылка (https://доменное_имя) на ваш проект Kittygram
-taski_domain: полная ссылка (https://доменное_имя) на ваш проект Taski
-dockerhub_username: ваш_логин_на_докерхабе
+### Базовая настройка:
+ - Клонировать репозиторий `git clone <адрес вашего репозитория>`
+ - Перейти в директорию с клонированным репозиторием
+ - В корневой директории проекта создать файл `.env` и заполнить его переменными по примеру из файла `.env.example`
+
+---
+### Настройка Nginx:
+Устанавливаем nginx:
+- `sudo apt install nginx -y`
+
+И сразу запускаем его:
+- `sudo systemctl start nginx`
+
+Для установки ограничений на открытые порты выполняем команду:
+- `sudo ufw allow 'Nginx Full' && sudo ufw allow OpenSSH`
+
+Включаем файервол:
+- `sudo ufw enable`
+
+Открываем конфигурационный файл nginx по адресу: `/etc/nginx/sites-enabled/default` и редактируем его:
+```text
+server {
+    server_name IP_адрес_сервера домен_сервера;
+    server_tokens off;
+    
+    location / {
+        proxy_pass http://127.0.0.1:9000;
+    }
+}
 ```
+Сохраняем изменения, выходим из редактора и проверяем корректность настроек:
+- `sudo nginx -t`
 
-Скопируйте содержимое файла `.github/workflows/main.yml` в файл `kittygram_workflow.yml` в корневой директории проекта.
+Перезапускаем nginx для применения изменений:
+- `sudo systemctl reload nginx`
+---
+### Получение и настройка SSL-сертификата
+ **Установка certbot**
+ - Находясь на сервере, последовательно выполните команды:
+        sudo apt install snapd
+        sudo snap install core; sudo snap refresh core
+        sudo snap install --classic certbot
+        sudo ln -s /snap/bin/certbot /usr/bin/certbot
+- Запустите certbot и получите SSL-сертификат:
+        sudo certbot --nginx
+- Сертификат автоматически сохранится на вашем сервере в системной директории _/etc/ssl/_  Также будет автоматически изменена конфигурация Nginx: в файл _/etc/nginx/sites-enabled/default_ добавятся новые настройки и будут прописаны пути к сертификату.
+- Перезагрузить конфигурацию Nginx `sudo systemctl reload nginx`
+---
 
-Для локального запуска тестов создайте виртуальное окружение, установите в него зависимости из backend/requirements.txt и запустите в корневой директории проекта `pytest`.
 
-## Чек-лист для проверки перед отправкой задания
+### Настройка и установка Docker:
+Находясь на сервере, последовательно выполните команды:
+   - `sudo apt update`
+   - `sudo apt install curl`
+   - `curl -fSL https://get.docker.com -o get-docker.sh`
+   - `sudo sh ./get-docker.sh`
+   - `sudo apt-get install docker-compose-plugin`
 
-- Проект Taski доступен по доменному имени, указанному в `tests.yml`.
-- Проект Kittygram доступен по доменному имени, указанному в `tests.yml`.
-- Пуш в ветку main запускает тестирование и деплой Kittygram, а после успешного деплоя вам приходит сообщение в телеграм.
-- В корне проекта есть файл `kittygram_workflow.yml`.
+Далее, выполните следующие команды для запуска проекта на локальной машине:
+ - `sudo docker compose -f docker-compose.production.yml pull`
+ - `sudo docker compose -f docker-compose.production.yml down`
+ - `sudo docker compose -f docker-compose.production.yml up -d`
+ - `sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate`
+ - `sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic`
+ - `sudo docker compose -f docker-compose.production.yml exec backend cp -r /app/collect_static/. /static_backend/static/`
+
+Проект будет доступен по адресу: `http://localhost:9000/`
+
+---
+
+Демо-версия проекта доступна по адресу: `https://kittygram-practikum.hopto.org/`
+
+## Автор проекта
+
+[Никита Смыков](https://github.com/Apicqq)
+
+
