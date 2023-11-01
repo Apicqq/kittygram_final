@@ -173,18 +173,22 @@ jobs:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
         message: |
-          PUSH TO THE ${{ github.repositoryUrl }} has been detected.
+          PUSH TO THE ${{ github.server_url }}/${{ github.repository }} has been detected.
 
           PUSH REPORT:
 
-          ${{ github.author }} pushed into ${{ github.ref_name }}. Last commit's message was: ${{ github.event.head_commit.message }}.
+          ${{ github.actor }} pushed into ${{ github.ref_name }}. Last commit's message was:
 
-          Link to the commit: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+          "${{ github.event.head_commit.message }}"
+
+          Link to the commit: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}
 
           Workflow has been executed successfully, including:
           - Running tests;
           - Pushing fresh images of repository to Dockerhub;
           - Deploying images to production server.
 
-          This report was triggered by following workflow: ${{ github.workflow }}: https://github/com/${{ github.workflow_ref }}
+          This report was triggered by following workflow:
+          
+          ${{ github.workflow }}: ${{ github.server_url }}/${{ github.repository }}/.github/workflows/${{ github.workflow }}
 
