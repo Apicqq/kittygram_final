@@ -190,5 +190,5 @@ jobs:
 
           This report was triggered by following workflow:
           
-          ${{ github.workflow }}: ${{ github.server_url }}/${{ github.repository }}/.github/workflows/${{ github.workflow }}
+          ${{ github.workflow }}: ${{ github.server_url }}/${{ github.repository }}/.github/workflows/main.yml
 
