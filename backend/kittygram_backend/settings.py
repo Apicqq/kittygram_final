@@ -4,7 +4,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-cg6*%6d51ef8f#4!r3*$vmxm4)abgjw8mo!4y-q*uq1!4$-89$')
+SECRET_KEY = os.getenv('SECRET_KEY',
+                       'django-insecure-cg6*%6d51ef8f#4!r3*$vmxm4)abgjw8mo!4y-q*uq1!4$-89$')
 
 DEBUG = os.getenv('DEBUG_STATUS') == 'True'
 
@@ -53,8 +54,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kittygram_backend.wsgi.application'
 
-
-DATABASES = {
+POSTGRES_DB = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('POSTGRES_DB', 'django'),
@@ -64,6 +64,18 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT', 5432)
     }
 }
+
+SQLITE_DB = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+if os.getenv('TEST_DB') == 'True':
+    DATABASES = SQLITE_DB
+else:
+    DATABASES = POSTGRES_DB
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -91,7 +103,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'collected_static'
 
@@ -102,7 +113,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated', 
+        'rest_framework.permissions.IsAuthenticated',
     ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
